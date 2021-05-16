@@ -1,31 +1,28 @@
+import javafx.animation.KeyFrame;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Stack;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Scanner;
 import java.util.LinkedList;
 import java.math.BigInteger;
  
 public class App extends Application {
-    // Stack to store the steps to the solution where the head is the initial state
-	// and the tail is the goal-state
 	static public Stack<GTNode> solPath = new Stack<GTNode>();
-	// HashMap to store the previously visited/explored states (using a hashmap for
-	// O(1) access to check for duplicates when generating new states)
 	static public HashMap<BigInteger, Integer> visited = new HashMap<BigInteger, Integer>();
-	// varaible to record the start time of each algorithm
 	static double startTime;
-	// varaible to record the end time of each algorithm
 	static double endTime;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -38,54 +35,85 @@ public class App extends Application {
         TextField dimensioni = new TextField();
         Text shenoAlgoritmin = new Text("\nShenoni algoritmin: ");
         TextField algoritmi = new TextField();
-        Text shenoNumrat = new Text("\nA deshironi ti shenoni numrat apo te gjenerohen ne menyre te rastesishme: ");
-        TextField numrat = new TextField();
 		
-        Text hapsire = new Text("\n");
-        Button b = new Button("Kliko");
-	    b.setOnAction(
-		e ->  {
-            String Numrat = numrat.getText();
+		Text hapsire = new Text("\n");
+        Button bRandom = new Button("Random");
+		Button bShenoj = new Button("Shenoj");
+		
+		HBox rootNode = new HBox();
+        
+        TextField Value1 = new TextField();
+        rootNode.getChildren().add(Value1);
+        Value1.setMaxSize(30, 30);
+        TextField Value2 = new TextField();
+        rootNode.getChildren().add(Value2);
+        Value2.setMaxSize(30, 30);
+        TextField Value3 = new TextField();
+        rootNode.getChildren().add(Value3);
+        Value3.setMaxSize(30, 30);
+
+        HBox rootNode2 = new HBox();
+    
+        TextField Value4 = new TextField();
+        rootNode2.getChildren().add(Value4);
+        Value4.setMaxSize(30, 30);
+        TextField Value5 = new TextField();
+        rootNode2.getChildren().add(Value5);
+        Value5.setMaxSize(30, 30);
+        TextField Value6 = new TextField();
+        rootNode2.getChildren().add(Value6);
+        Value6.setMaxSize(30, 30);
+
+        HBox rootNode3 = new HBox();
+    
+        TextField Value7 = new TextField();
+        rootNode3.getChildren().add(Value7);
+        Value7.setMaxSize(30, 30);
+        TextField Value8 = new TextField();
+        rootNode3.getChildren().add(Value8);
+        Value8.setMaxSize(30, 30);
+        TextField Value9 = new TextField();
+        rootNode3.getChildren().add(Value9);
+        Value9.setMaxSize(30, 30);
+
+
+	    bRandom.setOnAction( e ->  {
             int Dimensioni = Integer.parseInt(dimensioni.getText());
+            randomInitialState(Dimensioni, algoritmi.getText());
+        });
 
-            if(Numrat.equals("random")) {
-                randomInitialState(Dimensioni, algoritmi.getText());
-            }
-            else if(Numrat.equals("shenoj")) {
-                TextField m;
-                int matrix[][] = null;
-                //int matrix[][] = { { 3, 2, 8 }, { 4, 0, 1 }, { 7, 6, 5 } };
-                for(int i = 0; i < Dimensioni; i++) {
-                    for(int j = 0; j < Dimensioni; j++) {
-                         m = new TextField();
-                         matrix[i][j] = Integer.parseInt(m.getText());
-                    }
-                }
-                int matrixm[][] =  matrix;
+		bShenoj.setOnAction(
+			e ->  {
+			int Dimensioni = Integer.parseInt(dimensioni.getText());
+			Integer value1 = Integer.valueOf(Value1.getText());
+            Integer value2 = Integer.valueOf(Value2.getText());
+            Integer value3 = Integer.valueOf(Value3.getText());
+            Integer value4 = Integer.valueOf(Value4.getText());
+            Integer value5 = Integer.valueOf(Value5.getText());
+            Integer value6 = Integer.valueOf(Value6.getText());
+			Integer value7 = Integer.valueOf(Value7.getText());
+            Integer value8 = Integer.valueOf(Value8.getText());
+            Integer value9 = Integer.valueOf(Value9.getText());
 
-                preWrittenInitialState(Dimensioni, algoritmi.getText(), matrixm);
-            }
-            else {
-                System.out.println("Keni shenuar gabim 1.");
-            }
-        }
-    );
+		    int matrix[][] = { { value1, value2, value3 }, { value4, value5, value6 }, { value7, value8, value9 } };
+			
+			preWrittenInitialState(Dimensioni, algoritmi.getText(), matrix);
+		 });
+
+		 
+
+        HBox butonat = new HBox();
+		butonat.getChildren().addAll(bRandom, bShenoj);
 
         VBox root = new VBox();
         root.setPadding(new Insets(10, 10, 10, 10));
-        root.getChildren().addAll(shenoDimensionin, dimensioni, shenoAlgoritmin, algoritmi, shenoNumrat, numrat, hapsire, b);
+        root.getChildren().addAll(shenoDimensionin, dimensioni, shenoAlgoritmin, algoritmi, hapsire, butonat,rootNode, rootNode2, rootNode3);
         primaryStage.setScene(new Scene(root, 600, 450));
         primaryStage.show();
     }
     public static void randomInitialState(int dimension, String choseAlgorithm) {
-		// The given integer in the parameter of the initilized GTNode is the dimensions
-		// of the puzzle (it doesn't have to be 3x3 it can be of any of size)
 		GTNode initial = new GTNode(dimension);
-
-		// Call method fill() to fill up the puzzle with the appropriate numbers
 		initial.fill();
-
-		// Shuffle the puzzle randomly
 		initial.shuffle();
 
 		if(choseAlgorithm.equals("Astar")) {
@@ -103,32 +131,13 @@ public class App extends Application {
 		else {
 			System.out.print("Keni shenuar gabim");
 		}
-//		DLS(initial, 5);
 	}
 
 	public static void preWrittenInitialState(int dimension, String choseAlgorithm, int matrix[][]) {
-		// The given integer in the parameter of the initilized GTNode is the dimensions
-		// of the puzzle (it doesn't have to be 3x3 it can be of any of size)
 		GTNode initial = new GTNode(dimension);
 		
-	    
-
-		// Prewritten initial state (if the dimensions aren't 3x3, then change the input
-		// accordingly)
-		//matrix[][] = { { 1, 4, 8, 0 }, { 6, 2, 3, 11 }, { 13, 7, 10, 12 }, { 5, 9, 15, 14 } };
-		
-		/*Scanner scan = new Scanner(System.in);
-		System.out.println("Shenoj elementet e matrices");
-		for(int i = 0; i < dimension; i++) {
-			for(int j = 0; j < dimension; j++) {
-				matrix[i][j] = scan.nextInt();
-			}
-		}*/
-
-		// Assigning the matrix to the GTNode object
 		initial.matrix = matrix;
-		
-		// check for solvability
+
 		if(!initial.isSolvable())
 			System.out.println("This puzzle is unsolvable please change the input.");
 		else {
@@ -148,149 +157,87 @@ public class App extends Application {
 				System.out.print("Keni shenuar gabim");
 			}
 		}
-		
-
 	}
 
-	// A* Search algorithm
 	public static void Astar(GTNode initial) {
 		startTime = System.currentTimeMillis();
-		// initiate open list as a Priority Queue, and sort by A* score, and offer it
-		// the initial state
 		PriorityQueue<GTNode> openList = new PriorityQueue<GTNode>();
 		openList.offer(initial);
 		GTNode state;
 		while (!openList.isEmpty()) {
-			// poll the head of the PQ (having the lowest A* score) to explore and also
-			// added it to the visited list to avoid duplicates
 			state = openList.poll();
 			visited.put(state.hash(state.matrix), state.astar);
-			// check for completeness
+
 			if (state.isComplete()) {
-				// call the path method that fills the solution Stack with the states to the
-				// solution
 				path(state);
 				endTime = System.currentTimeMillis();
 				printInfo((endTime - startTime) / 1000.00);
 				return;
 			}
-			// generate possible states from current state
 			state.exploreAstar(visited, openList);
 		}
 	}
 
-	// Breadth-First Search algorithm
 	public static void BFS(GTNode initial) {
 		startTime = System.currentTimeMillis();
-		// initiate open list as a Queue and offer it the initial state
 		Queue<GTNode> openList = new LinkedList<GTNode>();
 		openList.offer(initial);
 		GTNode state;
 		while (!openList.isEmpty()) {
-			// poll the next state to explore and also added it to the visited list to avoid
-			// duplicates
 			state = openList.poll();
 			visited.put(state.hash(state.matrix), 0);
-			// check for completeness
 			if (state.isComplete()) {
-				// call the path method that fills the solution Stack with the states to the
-				// solution
 				path(state);
 				endTime = System.currentTimeMillis();
 				printInfo((endTime - startTime) / 1000.00);
 				return;
 			}
-			// generate possible states from current state
 			state.explore(visited, openList);
 		}
 	}
 
-	// Depth-First Search algorithm
 	public static void DFS(GTNode initial) {
 		startTime = System.currentTimeMillis();
-		// initiate open list as a Stack and push in it the initial state
 		Stack<GTNode> openList = new Stack<GTNode>();
 		openList.push(initial);
 		GTNode state;
 		while (!openList.isEmpty()) {
-			// pop the next state to explore and also added it to the visited list to avoid
-			// duplicates
 			state = openList.pop();
 			visited.put(state.hash(state.matrix), 0);
-			// check for completeness
 			if (state.isComplete()) {
-				// call the path method that fills the solution Stack with the states to the
-				// solution
 				path(state);
 				endTime = System.currentTimeMillis();
 				printInfo((endTime - startTime) / 1000.00);
 				return;
 			}
-			// generate possible states from current state
 			state.explore(visited, openList, -1);
 		}
 	}
 
-	// Iterative-Deepening algorithm
 	public static void ID(GTNode initial) {
 		startTime = System.currentTimeMillis();
-		// initiate open list as a Stack and push in it the initial state
 		Stack<GTNode> openList = new Stack<GTNode>();
 		int limit = 0;
 		while (true) {
-			// clear the open list and visited list so it can start over
 			openList.clear();
 			visited.clear();
 			openList.push(initial);
 			GTNode state;
 			while (!openList.isEmpty()) {
-				// pop the next state to explore and also added it to the visited list to avoid
-				// duplicates
 				state = openList.pop();
 				visited.put(state.hash(state.matrix), 0);
 				if (state.isComplete()) {
-					// call the path method that fills the solution Stack with the states to the
-					// solution
 					path(state);
 					endTime = System.currentTimeMillis();
 					printInfo((endTime - startTime) / 1000.00);
 					return;
 				}
-				// generate possible states from current state (and mind the limit)
 				state.explore(visited, openList, limit);
 			}
-			// increment the limit with each run
 			limit++;
 		}
 	}
 
-	// Depth-Limited Search algorithm
-	public static void DLS(GTNode initial, int limit) {
-		startTime = System.currentTimeMillis();
-		// initiate open list as a Stack and push in it the initial state
-		Stack<GTNode> openList = new Stack<GTNode>();
-		openList.push(initial);
-		GTNode state;
-		while (!openList.isEmpty()) {
-			// pop the next state to explore and also added it to the visited list to avoid
-			// duplicates
-			state = openList.pop();
-			visited.put(state.hash(state.matrix), 0);
-			if (state.isComplete()) {
-				// call the path method that fills the solution Stack with the states to the
-				// solution
-				path(state);
-				endTime = System.currentTimeMillis();
-				printInfo((endTime - startTime) / 1000.00);
-				return;
-			}
-			// generate possible states from current state (and mind the limit)
-			state.explore(visited, openList, limit);
-		}
-		System.out.println("Solution not found within the specified limit.");
-	}
-
-	// Adds the solution path to a stack
 	public static void path(GTNode c) {
 		while (c.parent != null) {
 			solPath.push(c);
@@ -299,19 +246,70 @@ public class App extends Application {
 		solPath.push(c);
 	}
 
-	// print the steps for the solution and outcomes of the algorithm
 	public static void printInfo(double time) {
-		// The size of the stack - 1 is the required moves to find the solution
 		int moves = solPath.size() - 1;
+		Text antari00 = new Text(" ");
+		Text antari01 = new Text(" ");
+		Text antari02 = new Text(" ");
+			  
+		Text antari10 = new Text(" ");
+		Text antari11 = new Text(" ");
+		Text antari12 = new Text(" ");
+			  
+		Text antari20 = new Text(" ");
+		Text antari21 = new Text(" ");
+		Text antari22 = new Text(" ");
 
-		// printing the moves to find the solution
 		while (!solPath.empty()) {
 			GTNode p = (GTNode) solPath.pop();
-			p.print();
+			int matrix[][] = { { p.print().get(0), p.print().get(1), p.print().get(2) }, 
+						   	   { p.print().get(3), p.print().get(4), p.print().get(5) }, 
+							   { p.print().get(6), p.print().get(7), p.print().get(8) } };
+							  
+							    antari00.setText(String.valueOf(matrix[0][0]));
+							    antari01.setText(String.valueOf(matrix[0][1]));
+							    antari02.setText(String.valueOf(matrix[0][2]));
+					   
+							    antari10.setText(String.valueOf(matrix[1][0]));
+							    antari11.setText(String.valueOf(matrix[1][1]));
+							    antari12.setText(String.valueOf(matrix[1][2]));
+					   
+							    antari20.setText(String.valueOf(matrix[2][0]));
+							    antari21.setText(String.valueOf(matrix[2][1]));
+							    antari22.setText(String.valueOf(matrix[2][2]));			
+				
 		}
+		
+		HBox rreshti1 = new HBox();
+		rreshti1.getChildren().addAll(antari00, antari01, antari02);
 
-		System.out.println("Solved in " + moves + " moves.");
-		System.out.println("Time taken " + time + " seconds.");
+		HBox rreshti2 = new HBox();
+		rreshti2.getChildren().addAll(antari10, antari11, antari12);
+
+		HBox rreshti3 = new HBox();
+		rreshti3.getChildren().addAll(antari20, antari21, antari22);
+
+		VBox box = new VBox();
+		box.getChildren().addAll(rreshti1, rreshti2, rreshti3);
+		Scene s1 = new Scene(box, 400, 400);
+		Stage ss = new Stage();
+		ss.setScene(s1);
+		ss.show();
+		Kthimi(moves, time);
+	}
+	public static void Kthimi(int mm, double ss) {
+		Text t1 = new Text("NJe");
+		Text t2 = new Text("dy");
+
+		t1.setText("Solved in " + mm + " moves.");
+		t2.setText("Time taken " + ss + " seconds.");
+
+		VBox box = new VBox();
+		box.getChildren().addAll(t1,t2);
+		Scene s = new Scene(box, 400, 400);
+		Stage secondS = new Stage();
+		secondS.setScene(s);
+		secondS.show();
 	}
 
 }
