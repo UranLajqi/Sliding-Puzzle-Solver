@@ -52,7 +52,32 @@ public class App extends Application {
         HBox rootNode4 = new HBox();
         Button aButton = new Button("Calculate");
         rootNode4.getChildren().add(aButton);
-        TextField result = new TextField();
+
+		TextField antari00 = new TextField();
+		TextField antari01 = new TextField();
+		TextField antari02 = new TextField();
+
+		TextField antari10 = new TextField();
+		TextField antari11 = new TextField();
+		TextField antari12 = new TextField();
+
+		TextField antari20 = new TextField();
+		TextField antari21 = new TextField();
+		TextField antari22 = new TextField();
+
+		HBox rreshti1 = new HBox();
+		rreshti1.getChildren().addAll(antari00,antari01,antari02);
+
+		HBox rreshti2 = new HBox();
+		rreshti2.getChildren().addAll(antari10,antari11,antari12);
+
+		HBox rreshti3 = new HBox();
+		rreshti3.getChildren().addAll(antari20,antari21,antari22);
+
+		VBox matrica = new VBox();
+		matrica.getChildren().addAll(rreshti1,rreshti2,rreshti3);
+
+
         aButton.setOnAction(e -> {
             Integer value1 = Integer.valueOf(Value1.getText());
             Integer value2 = Integer.valueOf(Value2.getText());
@@ -60,12 +85,38 @@ public class App extends Application {
             Integer value4 = Integer.valueOf(Value4.getText());
             Integer value5 = Integer.valueOf(Value5.getText());
             Integer value6 = Integer.valueOf(Value6.getText());
-            Integer r = value1+value2+value3+value4+value5+value6;
-            result.setText(r.toString());
+			Integer value7 = Integer.valueOf(Value7.getText());
+            Integer value8 = Integer.valueOf(Value8.getText());
+            Integer value9 = Integer.valueOf(Value9.getText());
+
+		    int matrix[][] = { { value1, value2, value3 }, { value4, value5, value6 }, { value7, value8, value9 } };
+
+			System.out.print("\n__________________________________");
+			for (int i = 0; i < matrix.length; i++) {
+				System.out.println("\n");
+				for (int j = 0; j < matrix.length; j++) {
+					System.out.print("|" + matrix[i][j] + "|" + "\t");
+				}
+			}
+			System.out.println("\n__________________________________");
+
+			antari00.setText(Integer.toString(matrix[0][0]));
+			antari01.setText(Integer.toString(matrix[0][1]));
+			antari02.setText(Integer.toString(matrix[0][2]));
+
+			antari10.setText(Integer.toString(matrix[1][0]));
+			antari11.setText(Integer.toString(matrix[1][1]));
+			antari12.setText(Integer.toString(matrix[1][2]));
+
+			antari20.setText(Integer.toString(matrix[2][0]));
+			antari21.setText(Integer.toString(matrix[2][1]));
+			antari22.setText(Integer.toString(matrix[2][2]));
         });
         
         VBox v = new VBox();
-        v.getChildren().addAll(rootNode, rootNode2, rootNode3, rootNode4, result);
+        v.getChildren().addAll(rootNode, rootNode2, rootNode3, rootNode4, matrica);
+
+		
 
         Scene myScene = new Scene(v, 500, 400);
         myStage.setScene(myScene);
