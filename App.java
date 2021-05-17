@@ -56,7 +56,7 @@ public class App extends Application {
         TextField Value3 = new TextField("");
         rootNode1.getChildren().add(Value3);
         Value3.setMaxSize(30, 30);
-		HBox.setMargin(Value1, new Insets(0,2,0,240));
+		HBox.setMargin(Value1, new Insets(0,2,0,140));
 		HBox.setMargin(Value2, new Insets(0,2,0,0));
 		HBox.setMargin(Value3, new Insets(0,2,0,0));
 		rootNode1.setVisible(false);
@@ -71,7 +71,7 @@ public class App extends Application {
         TextField Value6 = new TextField("");
         rootNode2.getChildren().add(Value6);
         Value6.setMaxSize(30, 30);
-		HBox.setMargin(Value4, new Insets(0,2,0,240));
+		HBox.setMargin(Value4, new Insets(0,2,0,140));
 		HBox.setMargin(Value5, new Insets(0,2,0,0));
 		HBox.setMargin(Value6, new Insets(0,2,0,0));
 		rootNode2.setVisible(false);
@@ -86,7 +86,7 @@ public class App extends Application {
         TextField Value9 = new TextField("");
         rootNode3.getChildren().add(Value9);
         Value9.setMaxSize(30, 30);
-		HBox.setMargin(Value7, new Insets(0,2,0,240));
+		HBox.setMargin(Value7, new Insets(0,2,0,140));
 		HBox.setMargin(Value8, new Insets(0,2,0,0));
 		HBox.setMargin(Value9, new Insets(0,2,0,0));
 		rootNode3.setVisible(false);
@@ -96,34 +96,174 @@ public class App extends Application {
 		gjejEnigmen.setVisible(false);
 
 	    bRandom.setOnAction( e ->  {
-            int Dimensioni = Integer.parseInt(dimensioni.getText());
-            randomInitialState(Dimensioni, algoritmi.getText());
+			if(dimensioni.getText().isEmpty() && algoritmi.getText().isEmpty()) {
+				Text Shpjegimi = new Text(" ");
+				Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+				Shpjegimi.setText("Duhet te plotesohen fushat Sheno dimenzionin \n\t\t   dhe Sheno algoritmin.");
+				VBox boxShpjegimi = new VBox();
+				boxShpjegimi.setAlignment(Pos.CENTER);
+				boxShpjegimi.getChildren().addAll(Shpjegimi);
+				Scene skenaShpjegimi = new Scene(boxShpjegimi, 500, 200);
+				Stage pamjaShpjegimi = new Stage();
+				pamjaShpjegimi.setTitle("Shpjegimi");
+				pamjaShpjegimi.setScene(skenaShpjegimi);
+				pamjaShpjegimi.show();
+			}
+			else if (!dimensioni.getText().isEmpty() && algoritmi.getText().isEmpty()) {
+				Text Shpjegimi = new Text(" ");
+				Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+				Shpjegimi.setText("Duhet te plotesohet fusha Sheno algoritmin.");
+				VBox boxShpjegimi = new VBox();
+				boxShpjegimi.setAlignment(Pos.CENTER);
+				boxShpjegimi.getChildren().addAll(Shpjegimi);
+				Scene skenaShpjegimi = new Scene(boxShpjegimi, 500, 200);
+				Stage pamjaShpjegimi = new Stage();
+				pamjaShpjegimi.setTitle("Shpjegimi");
+				pamjaShpjegimi.setScene(skenaShpjegimi);
+				pamjaShpjegimi.show();
+			}
+			else if (dimensioni.getText().isEmpty() && !algoritmi.getText().isEmpty()) {
+				Text Shpjegimi = new Text(" ");
+				Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+				Shpjegimi.setText("Duhet te plotesohet fusha Sheno dimenzionin.");
+				VBox boxShpjegimi = new VBox();
+				boxShpjegimi.setAlignment(Pos.CENTER);
+				boxShpjegimi.getChildren().addAll(Shpjegimi);
+				Scene skenaShpjegimi = new Scene(boxShpjegimi, 500, 200);
+				Stage pamjaShpjegimi = new Stage();
+				pamjaShpjegimi.setTitle("Shpjegimi");
+				pamjaShpjegimi.setScene(skenaShpjegimi);
+				pamjaShpjegimi.show();
+			}
+			else {
+				if((dimensioni.getText().equals("3") || dimensioni.getText().equals("4")) &&
+				   (algoritmi.getText().equals("Astar") || algoritmi.getText().equals("BFS") ||
+                   algoritmi.getText().equals("DFS") || algoritmi.getText().equals("ID")))  
+				{
+					int Dimensioni = Integer.parseInt(dimensioni.getText());
+					randomInitialState(Dimensioni, algoritmi.getText());
+				}
+				else {
+					Text Shpjegimi = new Text(" ");
+					Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+					Shpjegimi.setText("Te fusha e dimenzionit duhet te shnoni 3 ose 4 per rendin\n" +
+										" e matrices. Kurse te fusha e alforitmit duhet te shenoni\n" +
+										" njerin nga algorimet Astar, BFS, DFS, ID.");
+					VBox boxShpjegimi = new VBox();
+					boxShpjegimi.setAlignment(Pos.CENTER);
+					boxShpjegimi.getChildren().addAll(Shpjegimi);
+					Scene skenaShpjegimi = new Scene(boxShpjegimi, 700, 200);
+					Stage pamjaShpjegimi = new Stage();
+					pamjaShpjegimi.setTitle("Shpjegimi");
+					pamjaShpjegimi.setScene(skenaShpjegimi);
+					pamjaShpjegimi.show();
+				}
+				
+			}
         });
 
 		bShenoj.setOnAction(e ->  {
-			rootNode1.setVisible(true);
-			rootNode2.setVisible(true);
-			rootNode3.setVisible(true);
-			gjejEnigmen.setVisible(true);
+			if(dimensioni.getText().isEmpty() && algoritmi.getText().isEmpty()) {
+				Text Shpjegimi = new Text(" ");
+				Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+				Shpjegimi.setText("Duhet te plotesohen fushat Sheno dimenzionin \n\t\t   dhe Sheno algoritmin.");
+				VBox boxShpjegimi = new VBox();
+				boxShpjegimi.setAlignment(Pos.CENTER);
+				boxShpjegimi.getChildren().addAll(Shpjegimi);
+				Scene skenaShpjegimi = new Scene(boxShpjegimi, 500, 200);
+				Stage pamjaShpjegimi = new Stage();
+				pamjaShpjegimi.setTitle("Shpjegimi");
+				pamjaShpjegimi.setScene(skenaShpjegimi);
+				pamjaShpjegimi.show();
+			}
+			else if (!dimensioni.getText().isEmpty() && algoritmi.getText().isEmpty()) {
+				Text Shpjegimi = new Text(" ");
+				Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+				Shpjegimi.setText("Duhet te plotesohet fusha Sheno algoritmin.");
+				VBox boxShpjegimi = new VBox();
+				boxShpjegimi.setAlignment(Pos.CENTER);
+				boxShpjegimi.getChildren().addAll(Shpjegimi);
+				Scene skenaShpjegimi = new Scene(boxShpjegimi, 500, 200);
+				Stage pamjaShpjegimi = new Stage();
+				pamjaShpjegimi.setTitle("Shpjegimi");
+				pamjaShpjegimi.setScene(skenaShpjegimi);
+				pamjaShpjegimi.show();
+			}
+			else if (dimensioni.getText().isEmpty() && !algoritmi.getText().isEmpty()) {
+				Text Shpjegimi = new Text(" ");
+				Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+				Shpjegimi.setText("Duhet te plotesohet fusha Sheno dimenzionin.");
+				VBox boxShpjegimi = new VBox();
+				boxShpjegimi.setAlignment(Pos.CENTER);
+				boxShpjegimi.getChildren().addAll(Shpjegimi);
+				Scene skenaShpjegimi = new Scene(boxShpjegimi, 500, 200);
+				Stage pamjaShpjegimi = new Stage();
+				pamjaShpjegimi.setTitle("Shpjegimi");
+				pamjaShpjegimi.setScene(skenaShpjegimi);
+				pamjaShpjegimi.show();
+			}
+			else {
+				if((dimensioni.getText().equals("3") || dimensioni.getText().equals("4")) &&
+				   (algoritmi.getText().equals("Astar") || algoritmi.getText().equals("BFS") ||
+                   algoritmi.getText().equals("DFS") || algoritmi.getText().equals("ID")))  
+				{
+					rootNode1.setVisible(true);
+					rootNode2.setVisible(true);
+					rootNode3.setVisible(true);
+					gjejEnigmen.setVisible(true);
+				}
+				else {
+					Text Shpjegimi = new Text(" ");
+					Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+					Shpjegimi.setText("Te fusha e dimenzionit duhet te shnoni 3 ose 4 per rendin\n" +
+										" e matrices. Kurse te fusha e alforitmit duhet te shenoni\n" +
+										" njerin nga algoritmet Astar, BFS, DFS, ID.");
+					VBox boxShpjegimi = new VBox();
+					boxShpjegimi.setAlignment(Pos.CENTER);
+					boxShpjegimi.getChildren().addAll(Shpjegimi);
+					Scene skenaShpjegimi = new Scene(boxShpjegimi, 700, 200);
+					Stage pamjaShpjegimi = new Stage();
+					pamjaShpjegimi.setTitle("Shpjegimi");
+					pamjaShpjegimi.setScene(skenaShpjegimi);
+					pamjaShpjegimi.show();
+				}
+			}
 		});
 
 		gjejEnigmen.setOnAction(e -> {
-			int Dimensioni = Integer.parseInt(dimensioni.getText());
-			Integer value1 = Integer.valueOf(Value1.getText());
-            Integer value2 = Integer.valueOf(Value2.getText());
-            Integer value3 = Integer.valueOf(Value3.getText());
-            Integer value4 = Integer.valueOf(Value4.getText());
-            Integer value5 = Integer.valueOf(Value5.getText());
-            Integer value6 = Integer.valueOf(Value6.getText());
-			Integer value7 = Integer.valueOf(Value7.getText());
-            Integer value8 = Integer.valueOf(Value8.getText());
-            Integer value9 = Integer.valueOf(Value9.getText());
+			if(Value1.getText().isEmpty() || Value2.getText().isEmpty() || Value3.getText().isEmpty() ||
+			   Value4.getText().isEmpty() || Value5.getText().isEmpty() || Value6.getText().isEmpty() ||
+			   Value7.getText().isEmpty() || Value8.getText().isEmpty() || Value9.getText().isEmpty()) {
+					Text Shpjegimi = new Text(" ");
+					Shpjegimi.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+					Shpjegimi.setText("Duhet te plotesohen te gjitha fushat e matrices.");
+					VBox boxShpjegimi = new VBox();
+					boxShpjegimi.setAlignment(Pos.CENTER);
+					boxShpjegimi.getChildren().addAll(Shpjegimi);
+					Scene skenaShpjegimi = new Scene(boxShpjegimi, 500, 200);
+					Stage pamjaShpjegimi = new Stage();
+					pamjaShpjegimi.setTitle("Shpjegimi");
+					pamjaShpjegimi.setScene(skenaShpjegimi);
+					pamjaShpjegimi.show();
+			}
+			else {
+				int Dimensioni = Integer.parseInt(dimensioni.getText());
+				Integer value1 = Integer.valueOf(Value1.getText());
+				Integer value2 = Integer.valueOf(Value2.getText());
+				Integer value3 = Integer.valueOf(Value3.getText());
+				Integer value4 = Integer.valueOf(Value4.getText());
+				Integer value5 = Integer.valueOf(Value5.getText());
+				Integer value6 = Integer.valueOf(Value6.getText());
+				Integer value7 = Integer.valueOf(Value7.getText());
+				Integer value8 = Integer.valueOf(Value8.getText());
+				Integer value9 = Integer.valueOf(Value9.getText());
 
-		    int matrix[][] = { { value1, value2, value3 },
-							   { value4, value5, value6 }, 
-							   { value7, value8, value9 } };
-			
-			preWrittenInitialState(Dimensioni, algoritmi.getText(), matrix);
+				int matrix[][] = { { value1, value2, value3 },
+								{ value4, value5, value6 }, 
+								{ value7, value8, value9 } };
+				
+				preWrittenInitialState(Dimensioni, algoritmi.getText(), matrix);
+			}
 		});
 
 
@@ -138,7 +278,7 @@ public class App extends Application {
         root.getChildren().addAll(shenoDimensionin, dimensioni, shenoAlgoritmin, 
 								  algoritmi, bRandom, bShenoj, rootNode1, rootNode2, rootNode3, gjejEnigmen);
 		root.setAlignment(Pos.CENTER);
-        primaryStage.setScene(new Scene(root, 600, 450));
+        primaryStage.setScene(new Scene(root, 400, 450));
         primaryStage.show();
     }
     public static void randomInitialState(int dimension, String choseAlgorithm) {
@@ -341,6 +481,7 @@ public class App extends Application {
 		box.setAlignment(Pos.CENTER);
 		Scene skena = new Scene(box, 400, 200);
 		Stage pamja = new Stage();
+		pamja.setTitle("Shfaqja e levizjeve");
 		pamja.setScene(skena);
 		pamja.show();
 
