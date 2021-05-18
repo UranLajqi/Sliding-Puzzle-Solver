@@ -1,0 +1,292 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.math.BigInteger;
+
+// GTNode (General Tree Node) e cila perdoret per te ruajtur cdo gjendje te enigmes
+public class GTNode implements Comparable<GTNode> {
+
+  // drejtimet e levizjes ruhen per te kontrolluar se a mund te kryhet ajo levizje
+  String dir[] = { "up", "down", "right", "left" };
+  public int dimension;
+  // gjendja e parent ruhet per ta ditur zgjidhjen kur gjendja e deshiruar gjindet
+  public GTNode parent;
+  public int[][] matrix;
+  public int level;
+  public int astar;
+
+  // konstruktori per gjendjen fillestare the enigmes ku madhesia(size) edhe dimenzioni i enigmes
+  public GTNode(int size) {
+    this.dimension = size;
+    matrix = new int[size][size];
+    parent = null;
+    GTNode p = null;
+    level = 0;
+    astar = heuristic() + level;
+  }
+
+  // konstruktori per gjendjen e gjeneruar prej metodave
+  public GTNode(int[][] m, GTNode p) {
+    matrix = m;
+    parent = p;
+    level = p.level + 1;
+    astar = heuristic() + level;
+  }
+
+  // BFS metoda e eksplorimit per gjenerim te anarve te ardhshem
+  public void explore(HashMap<BigInteger, Integer> visited, Queue<GTNode> openList) {
+  // for loop-a per kontrollim te levizjeve te mundshme te gjendjes aktuale dhe shtimi i tyre ne list
+    for (int i = 0; i < 4; i++) {
+      int[][] temp = copy();
+      // vlera boolean-e already tregon se a eshte gjeneruar gjendja e enigmes
+      boolean already = false;
+      if (move(temp, dir[i])) {
+        if (visited.containsKey(hash(temp))) {
+            already = true;
+            continue;
+        }
+        if (!already) {
+            openList.offer(new GTNode(temp, this));
+            visited.put(hash(temp), 0);
+        }
+      }
+    }
+  }
+  // DFS dhe ID metoda e eksplorimit per gjenerim te anarve te ardhshem
+  public void explore(HashMap<BigInteger, Integer> visited, Stack<GTNode> openList, int limit) {
+    // nese limit eshte -1 atehere behet eksplorimi duke perdorur DFS, per vlera tjera ID
+    if (limit != -1)
+      if (this.level >= limit)
+        return;
+
+    // for loop-a per kontrollim te levizjeve te mundshme te gjendjes aktuale dhe shtimi i tyre ne list
+    for (int i = 0; i < 4; i++) {
+      int[][] temp = copy();
+      // vlera boolean-e already tregon se a eshte gjeneruar gjendja e enigmes
+      boolean already = false;
+      if (move(temp, dir[i])) {
+        if (visited.containsKey(hash(temp))) {
+          already = true;
+          continue;
+        }
+        if (!already) {
+          openList.push(new GTNode(temp, this));
+          visited.put(hash(temp), 0);
+        }
+      }
+    }
+  }
+  // A* metoda e eksplorimit per gjenerim te anarve te ardhshem
+  public void exploreAstar(HashMap<BigInteger, Integer> visited, 
+                           PriorityQueue<GTNode> openList) {
+
+    for (int i = 0; i < 4; i++) {
+      GTNode temp = new GTNode(this.copy(), this);
+      boolean worse = false;
+      if (move(temp.matrix, dir[i])) {
+        if (visited.containsKey(hash(temp.matrix)))
+          if (visited.get(hash(temp.matrix)) < temp.astar) {
+            worse = true;
+            continue;
+          }
+          if (!worse) {
+            visited.put(hash(temp.matrix), temp.astar);
+            openList.offer(temp);
+          }
+      }
+    }
+  }
+  // kjo metode ben kalkulimin e distances mahanttan heuristic per enigmen e dhene
+  public int heuristic() {
+    int c = 1;
+    int h = 0;
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix.length; j++) {
+        if (c == matrix.length * matrix.length)
+          continue;
+          int x = find(c)[0];
+          int y = find(c)[1];
+          h += Math.abs(x - i) + Math.abs(y - j);
+          c++;
+      }
+    }
+    return h;
+  }
+
+  // kjo metode perdoret per ti derguar antaret e matrices tek metoda kryesore
+  public  ArrayList<Integer> print() { 
+    ArrayList<Integer> cars = new ArrayList<Integer>();
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix.length; j++) {
+        cars.add(matrix[i][j]);
+      }
+    }
+    return cars;
+  }
+
+
+
+  // kjo metode perdoret per te mbushur gjendjen fillestare te enigmes
+  public int[][] fill() {
+    int c = 1;
+    for (int i = 0; i < dimension; i++) {
+      for (int j = 0; j < dimension; j++) {
+        if (i == dimension - 1 && j == dimension - 1)
+          break;
+          matrix[i][j] = c++;
+      }
+    }
+    return matrix;
+  }
+  // kjo metode perdoret per te bere shuffle(perzierjen) e numrave ne gjendjen fillestare
+  public void shuffle() {
+    int limit = matrix.length - (matrix.length/2 + 1);
+    for (int i = 0; i < limit; i++) {
+      move(matrix, "up");
+      move(matrix, "left");
+    }
+    for (int i = 0; i < 33 * dimension; i++) {
+      move(matrix, dir[(int) (Math.random() * 4)]);
+    }
+  }
+  // gjene koordinatat e numrit te dhene
+  public int[] find(int n) {
+    int[] coord = new int[2];
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix.length; j++) {
+        if (matrix[i][j] == n) {
+          coord[0] = i;
+          coord[1] = j;
+        }
+      }
+    }
+    return coord;
+  }
+  // kjo metode leviz vrimen e zbrazet ne drejtimin e specifikuar
+  public boolean move(int[][] a, String dir) {
+    int zCoord[] = find(0);
+    int x = zCoord[0];
+    int y = zCoord[1];
+
+    switch (dir) {
+
+    case "up":
+        if (x - 1 >= 0) {
+            a[x][y] = a[x - 1][y];
+            a[x - 1][y] = 0;
+            return true;
+        }
+        break;
+    case "down":
+        if (x + 1 <= a.length - 1) {
+            a[x][y] = a[x + 1][y];
+            a[x + 1][y] = 0;
+            return true;
+        }
+        break;
+    case "right":
+        if (y + 1 <= a.length - 1) {
+            a[x][y] = a[x][y + 1];
+            a[x][y + 1] = 0;
+            return true;
+        }
+        break;
+    case "left":
+        if (y - 1 >= 0) {
+            a[x][y] = a[x][y - 1];
+            a[x][y - 1] = 0;
+            return true;
+        }
+        break;
+    default:
+        return false;
+    }
+    return false;
+  }
+  // kontrollon nese enigma eshte zgjedhur apo jo
+  public boolean isComplete() {
+    int c = 1;
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix.length; j++) {
+            if (i == matrix.length - 1 && j == matrix.length - 1)
+                break;
+            if (matrix[i][j] != c)
+                return false;
+            c++;
+        }
+    }
+    return true;
+  }
+  // kthen nje kopje te matrices se dhene
+  public int[][] copy() {
+    int[][] copy = new int[matrix.length][matrix.length];
+    for (int i = 0; i < matrix.length; i++)
+        for (int j = 0; j < matrix.length; j++) {
+            copy[i][j] = matrix[i][j];
+        }
+    return copy;
+  }
+  // kthen nje hash funksion unik per gjendjen aktuale te enigmes
+  public BigInteger hash(int[][] matrix) {
+    String text = "";
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix.length; j++) {
+            text += Integer.toString(matrix[i][j]);
+        }
+    }
+    BigInteger hash = new BigInteger(text);
+    return hash;
+  }
+  // kontrollon se a eshte e zgjidhshme enigma
+  public boolean isSolvable() {
+    int linMatrix[] = new int[matrix.length * matrix.length];
+    int count = 0;
+    for (int i = 0; i < matrix.length; i++)
+        for (int j = 0; j < matrix.length; j++) {
+            linMatrix[count] = matrix[i][j];
+            count++;
+        }
+    int parity = 0;
+    int gridWidth = (int) Math.sqrt(linMatrix.length);
+    int row = 0;
+    int blankRow = 0;
+
+    for (int i = 0; i < linMatrix.length; i++) {
+        if (i % gridWidth == 0) {
+            row++;
+        }
+        if (linMatrix[i] == 0) {
+            blankRow = row;
+            continue;
+        }
+        for (int j = i + 1; j < linMatrix.length; j++) {
+            if (linMatrix[i] > linMatrix[j] && linMatrix[j] != 0) {
+                parity++;
+            }
+        }
+    }
+
+    if (gridWidth % 2 == 0) {
+        if (blankRow % 2 == 0) {
+            return parity % 2 == 0;
+        } else {
+            return parity % 2 != 0;
+        }
+    } else {
+        return parity % 2 == 0;
+    }
+  }
+
+  @Override
+  public int compareTo(GTNode a) {
+    if (this.astar > a.astar)
+        return 1;
+    else if (a.astar == this.astar)
+        return 0;
+    else
+        return -1;
+  }
+
+}
